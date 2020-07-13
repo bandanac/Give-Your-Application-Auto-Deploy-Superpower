@@ -14,18 +14,18 @@ jobs:
     steps:
       - run: echo world
   build_backend:
-    working_directory: ~/project/backend
     docker:
       - image: circleci/node:13.8.0
+    working_directory: ~/project/backend
     steps:
       - checkout:
         path: ~/project
       - run: npm i
       - run: npm run lint
   build_frontend:
-    working_directory: ~/project/frontend
     docker:
       - image: circleci/node:13.8.0
+    working_directory: ~/project/frontend
     steps:
       - checkout:
         path: ~/project
