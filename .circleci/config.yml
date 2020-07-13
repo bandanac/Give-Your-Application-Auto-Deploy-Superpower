@@ -16,21 +16,17 @@ jobs:
   build_backend:
     docker:
       - image: circleci/node:13.8.0
-    working_directory: ~/project/backend
     steps:
-      - checkout:
-        path: ~/project
-      - run: npm i
-      - run: npm run lint
+      - checkout
+      - run: cd backend && npm i
+      - run: cd backend && npm run lint
   build_frontend:
     docker:
       - image: circleci/node:13.8.0
-    working_directory: ~/project/frontend
     steps:
-      - checkout:
-        path: ~/project
-      - run: npm i
-      - run: npm run lint
+      - checkout
+      - run: cd frontend && npm i
+      - run: cd frontend && npm run lint
 workflows:
   # Name the workflow "welcome"
   welcome:
