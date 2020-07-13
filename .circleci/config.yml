@@ -16,6 +16,8 @@ jobs:
   build_backend:
     docker:
       - image: circleci/node:13.8.0
+    
+    working_directory: ~/project/backend
     steps:
       - checkout
       - run: npm i
@@ -23,6 +25,8 @@ jobs:
   build_frontend:
     docker:
       - image: circleci/node:13.8.0
+      
+    working_directory: ~/project/frontend
     steps:
       - checkout
       - run: npm i
