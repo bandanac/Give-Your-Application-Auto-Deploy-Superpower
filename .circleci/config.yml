@@ -13,6 +13,20 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - run: echo world
+  build_backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: npm i
+      - run: npm run lint
+  build_frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: npm i
+      - run: npm run lint
 workflows:
   # Name the workflow "welcome"
   welcome:
@@ -22,6 +36,12 @@ workflows:
       - print_world:
           requires:
             - print_hello
+      - build_backend:
+          requires:
+            - print_world
+      - build_frontend:
+          requires:
+            - build_backend
 
 # version: 2.1
 
