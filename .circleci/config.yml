@@ -33,14 +33,15 @@ jobs:
     steps:
       - checkout
       - run: yarn install
+      - run: yarn global add tslint typescript
       - run:
           name: "JavaScript Linter"
-          command: cd backend && yarn add tslint typescript --dev && yarn lint -- --format junit -o reports/junit/js-lint-results.xml
+          command: cd backend && yarn lint -- --format junit -o reports/junit/js-lint-results.xml
       - run:
           name: "JavaScript Test Suite"
           environment:
             JEST_JUNIT_OUTPUT: reports/junit/js-test-results.xml
-          command: yarn test -- --ci --testResultsProcessor="jest-junit"
+          command: cd backend && yarn test -- --ci --testResultsProcessor="jest-junit"
       - store_test_results:
           path: reports/junit
       - store_artifacts:
@@ -52,15 +53,15 @@ workflows:
     # Run the welcome/run job in its own container
     jobs:
       - print_hello
-      - print_world:
-          requires:
-            - print_hello
-      - build_backend:
-          requires:
-            - print_world
-      - build_frontend:
-          requires:
-            - build_backend
+      # - print_world:
+      #     requires:
+      #       - print_hello
+      # - build_backend:
+      #     requires:
+      #       - print_world
+      # - build_frontend:
+      #     requires:
+      #       - build_backend
       - test_backend
 
 # version: 2.1
