@@ -32,8 +32,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: yarn install
-      - run: yarn global add tslint typescript jest
+      - run: cd backend && yarn install
       - run:
           name: "JavaScript Linter"
           command: cd backend && yarn lint -- --format junit -o reports/junit/js-lint-results.xml
