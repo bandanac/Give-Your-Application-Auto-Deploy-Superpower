@@ -42,9 +42,9 @@ jobs:
             JEST_JUNIT_OUTPUT: reports/junit/js-test-results.xml
           command: cd backend && yarn test -- --ci --testResultsProcessor="jest-junit"
       - store_test_results:
-          path: reports/junit
+          path: backend/reports/junit
       - store_artifacts:
-          path: reports/junit
+          path: backend/reports/junit
 
 workflows:
   # Name the workflow "welcome"
