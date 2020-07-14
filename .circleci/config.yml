@@ -33,6 +33,7 @@ jobs:
     steps:
       - checkout
       - run: yarn install
+      - run: yarn add tslint typescript --dev
       - run:
           name: "JavaScript Linter"
           command: cd backend && yarn lint -- --format junit -o reports/junit/js-lint-results.xml
@@ -51,17 +52,17 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
+      - print_hello
+      - print_world:
+          requires:
+            - print_hello
+      - build_backend:
+          requires:
+            - print_world
+      - build_frontend:
+          requires:
+            - build_backend
       - test_backend
-      # - print_hello
-      # - print_world:
-      #     requires:
-      #       - print_hello
-      # - build_backend:
-      #     requires:
-      #       - print_world
-      # - build_frontend:
-      #     requires:
-      #       - build_backend
 
 # version: 2.1
 
