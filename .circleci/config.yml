@@ -27,21 +27,40 @@ jobs:
       - checkout
       - run: cd frontend && npm i
       - run: cd frontend && npm run lint
+  test_backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: yarn install
+      - run:
+        name: Install JUnit coverage reporter
+        command: yarn add --dev jest-junit
+      - run:
+        name: Run tests with JUnit as reporter
+        command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+        environment:
+          JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+      - store_test_results:
+        path: ./reports/junit/
+      - store_artifacts:
+        path: ./reports/junit
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - print_hello
-      - print_world:
-          requires:
-            - print_hello
-      - build_backend:
-          requires:
-            - print_world
-      - build_frontend:
-          requires:
-            - build_backend
+      - test_backend
+      # - print_hello
+      # - print_world:
+      #     requires:
+      #       - print_hello
+      # - build_backend:
+      #     requires:
+      #       - print_world
+      # - build_frontend:
+      #     requires:
+      #       - build_backend
 
 # version: 2.1
 
