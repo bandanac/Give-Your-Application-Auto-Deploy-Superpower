@@ -67,6 +67,18 @@ jobs:
           path: backend/reports/junit
       - store_artifacts:
           path: backend/reports/junit
+  analyze_backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: cd backend && npm audit --audit-level=critical
+  analyze_frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: cd frontend && npm audit --audit-level=critical
 
 workflows:
   # Name the workflow "welcome"
@@ -83,12 +95,14 @@ workflows:
       # - build_frontend:
       #     requires:
       #       - build_backend
-      - test_backend
-      - test_frontend
+      # - test_backend
+      # - test_frontend
+      - analyze_backend
+      - analyze_frontend
       - print_hello:
           requires:
-            - test_backend
-            - test_frontend
+            - analyze_backend
+            - analyze_frontend
 
 # version: 2.1
 
