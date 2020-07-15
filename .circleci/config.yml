@@ -32,7 +32,9 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: cd backend && yarn install
+      - run:
+          name: "Install dependencies"
+          command: cd backend && yarn install
       - run:
           name: "JavaScript Linter"
           command: cd backend && yarn lint -- --format junit -o reports/junit/js-lint-results.xml
@@ -45,13 +47,33 @@ jobs:
           path: backend/reports/junit
       - store_artifacts:
           path: backend/reports/junit
+  test_frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: "Install dependencies"
+          command: cd frontend && yarn install
+      - run:
+          name: "JavaScript Linter"
+          command: cd frontend && yarn lint -- --format junit -o reports/junit/js-lint-results.xml
+      - run:
+          name: "JavaScript Test Suite"
+          environment:
+            JEST_JUNIT_OUTPUT: reports/junit/js-test-results.xml
+          command: cd frontend && yarn test -- --ci --testResultsProcessor="jest-junit"
+      - store_test_results:
+          path: backend/reports/junit
+      - store_artifacts:
+          path: backend/reports/junit
 
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - print_hello
+      # - print_hello
       # - print_world:
       #     requires:
       #       - print_hello
@@ -62,6 +84,11 @@ workflows:
       #     requires:
       #       - build_backend
       - test_backend
+      - test_frontend
+      - print_hello:
+          requires:
+            - test_backend
+            - test_frontend
 
 # version: 2.1
 
